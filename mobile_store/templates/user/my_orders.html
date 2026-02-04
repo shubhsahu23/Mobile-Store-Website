@@ -1,0 +1,65 @@
+{% extends 'main/base.html' %}
+
+{% block title %}My Orders - MobileStore{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">My Orders</h1>
+            <p class="page-subtitle">Track your purchases and delivery status.</p>
+        </div>
+        <a href="{% url 'user_products' %}" class="btn btn-primary">Continue Shopping</a>
+    </div>
+
+    <div class="card p-0" style="overflow: hidden;">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for o in orders %}
+                    <tr>
+                        <td>
+                            <div class="flex items-center gap-4">
+                                {% if o.product.image %}
+                                <img src="{{ o.product.image.url }}" width="40" height="40"
+                                    style="object-fit: contain; border-radius: 4px;">
+                                {% endif %}
+                                <span style="font-weight: 500;">{{ o.product.name }}</span>
+                            </div>
+                        </td>
+                        <td>{{ o.quantity }}</td>
+                        <td style="font-weight: 600;">₹{{ o.total_price }}</td>
+                        <td>
+                            {% if o.status == 'Pending' %}
+                            <span class="badge badge-warning">{{ o.status }}</span>
+                            {% elif o.status == 'Delivered' %}
+                            <span class="badge badge-success">{{ o.status }}</span>
+                            {% else %}
+                            <span class="badge badge-muted">{{ o.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-muted">{{ o.order_date|date:"M d, Y" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-shopping-basket fa-2x text-muted mb-2"></i>
+                            <p class="text-muted">You haven't placed any orders yet.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<div style="padding: 3rem 2rem;">
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">Shopping Cart</h2>
+            <p class="page-subtitle">Review your items before checkout</p>
+        </div>
+    </div>
+
+    {% if items %}
+    <div style="display: grid; grid-template-columns: 1fr 350px; gap: 2rem; margin-top: 2rem;">
+        <!-- Cart Items -->
+        <div>
+            {% for item in items %}
+            <div class="card" style="display: grid; grid-template-columns: 150px 1fr auto; gap: 2rem; padding: 1.5rem; margin-bottom: 1.5rem; align-items: center;">
+                <!-- Product Image -->
+                <div style="height: 150px; border-radius: 0.75rem; overflow: hidden;">
+                    {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                    <div style="background: var(--light-bg); display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+                        <i class="fas fa-image fa-2x"></i>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Product Details -->
+                <div>
+                    <span class="product-brand">{{ item.product.brand }}</span>
+                    <h3 class="product-title" style="margin-bottom: 0.75rem;">{{ item.product.name }}</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
+                        Price: <span style="color: var(--primary-color); font-weight: 600;">₹{{ item.product.price }}</span>
+                    </p>
+
+                    <!-- Quantity Control -->
+                    <form method="POST" action="{% url 'update_cart' item.id %}" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                        {% csrf_token %}
+                        <input type="number" name="quantity" min="1" value="{{ item.quantity }}" style="width: 80px; padding: 0.5rem; border: 2px solid var(--border-color); border-radius: 0.5rem;">
+                        <button type="submit" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
+                            <i class="fas fa-sync"></i> Update
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Actions -->
+                <div style="display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-end;">
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">Subtotal</div>
+                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color);">₹{{ item.get_subtotal }}</div>
+                    </div>
+                    <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger" style="padding: 0.5rem 1rem; gap: 0.5rem;">
+                        <i class="fas fa-trash"></i> Remove
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Order Summary -->
+        <div class="card" style="height: fit-content; position: sticky; top: 2rem;">
+            <h3 style="margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-color); padding-bottom: 1rem;">Order Summary</h3>
+            
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                <span>Subtotal</span>
+                <span style="font-weight: 600;">₹{{ total }}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border-color); padding-bottom: 1rem;">
+                <span>Shipping</span>
+                <span style="font-weight: 600; color: var(--success-color);">FREE</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; margin-bottom: 2rem; font-size: 1.2rem;">
+                <span style="font-weight: 700;">Total</span>
+                <span style="font-weight: 700; color: var(--primary-color);">₹{{ total }}</span>
+            </div>
+
+            <a href="{% url 'checkout' %}" class="btn btn-hero" style="width: 100%; padding: 1rem; justify-content: center; margin-bottom: 1rem;">
+                <i class="fas fa-credit-card"></i> Proceed to Checkout
+            </a>
+
+            <a href="{% url 'home' %}" class="btn btn-secondary" style="width: 100%; padding: 1rem; justify-content: center;">
+                <i class="fas fa-arrow-left"></i> Continue Shopping
+            </a>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="card empty-state" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); margin-top: 3rem;">
+        <i class="fas fa-shopping-cart fa-4x text-muted mb-4"></i>
+        <h3 style="margin-bottom: 0.5rem;">Your cart is empty</h3>
+        <p class="text-muted" style="margin-bottom: 2rem;">Start shopping to add items to your cart</p>
+        <a href="{% url 'home' %}" class="btn btn-hero">
+            <i class="fas fa-shopping-bag"></i> Continue Shopping
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

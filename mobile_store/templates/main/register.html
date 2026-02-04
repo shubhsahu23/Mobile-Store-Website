@@ -1,0 +1,53 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Register - MobileStore{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="card auth-card" style="box-shadow: var(--shadow-xl);">
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+            <div class="icon-circle" style="margin-bottom: 1.5rem;">
+                <i class="fas fa-user-plus" style="font-size: 1.5rem;"></i>
+            </div>
+            <h2 class="auth-title" style="margin-bottom: 0.5rem;">Create Account</h2>
+            <p class="text-muted">Join us and start shopping today</p>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-user"
+                        style="margin-right: 0.5rem; color: var(--primary-color);"></i>Username</label>
+                <input type="text" name="username" class="form-control" placeholder="Choose a username" required
+                    autofocus>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-envelope"
+                        style="margin-right: 0.5rem; color: var(--primary-color);"></i>Email Address</label>
+                <input type="email" name="email" class="form-control" placeholder="name@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label"><i class="fas fa-lock"
+                        style="margin-right: 0.5rem; color: var(--primary-color);"></i>Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Create a strong password"
+                    required>
+            </div>
+
+            <button type="submit" class="btn btn-primary"
+                style="width: 100%; padding: 1rem; font-size: 1.05rem; margin-top: 0.5rem;">
+                <i class="fas fa-user-plus" style="margin-right: 0.5rem;"></i>Create Account
+            </button>
+        </form>
+
+        <div class="text-center mt-4" style="padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+            <p style="color: var(--text-muted); margin-bottom: 0.5rem;">Already have an account?</p>
+            <a href="{% url 'main_login' %}" class="btn btn-secondary" style="padding: 0.75rem 1.5rem;">
+                <i class="fas fa-sign-in-alt" style="margin-right: 0.5rem;"></i>Login
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

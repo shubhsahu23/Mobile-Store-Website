@@ -1,0 +1,71 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Place Order - {{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px;">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Review Order</h1>
+            <p class="page-subtitle">Confirm your product details and quantity before purchase.</p>
+        </div>
+        <a href="{% url 'user_products' %}" class="btn btn-secondary">Cancel</a>
+    </div>
+
+    <div class="two-col">
+        <!-- Product Details -->
+        <div class="card p-0" style="overflow: hidden;">
+            <div class="product-media" style="height: 300px; background: white;">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                <div class="text-muted">No Image</div>
+                {% endif %}
+            </div>
+            <div class="p-4">
+                <h3 class="mb-2">{{ product.name }}</h3>
+                <p class="text-muted mb-4">{{ product.description }}</p>
+                <div class="flex justify-between items-center">
+                    <span class="text-muted">Brand</span>
+                    <span style="font-weight: 500;">{{ product.brand }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Form -->
+        <div class="card">
+            <h3>Order Details</h3>
+            <div class="flex justify-between items-center py-4 border-bottom">
+                <span>Unit Price</span>
+                <span style="font-size: 1.25rem; font-weight: 700;">₹{{ product.price }}</span>
+            </div>
+
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" name="quantity" value="1" min="1" max="5" class="form-control"
+                        data-price="{{ product.price }}" onchange="updateTotal(this.value, this.dataset.price)">
+                </div>
+
+                <div class="alert alert-info mt-4">
+                    <div class="flex justify-between items-center">
+                        <span>Total Amount:</span>
+                        <strong id="totalAmount">₹{{ product.price }}</strong>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Confirm
+                    Purchase</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateTotal(qty, price) {
+        const total = Number(qty) * Number(price);
+        document.getElementById('totalAmount').innerText = '₹' + total;
+    }
+</script>
+{% endblock %}

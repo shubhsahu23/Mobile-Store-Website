@@ -1,0 +1,61 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Manage Users - MobileStore{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Registered Users</h1>
+            <p class="page-subtitle">Manage all customer and staff accounts.</p>
+        </div>
+        <a href="/adminuser/dashboard/" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <div class="card p-0" style="overflow: hidden;">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr>
+                        <td>
+                            <div class="flex items-center gap-2">
+                                <div
+                                    style="width: 32px; height: 32px; background: var(--primary-color); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                    {{ u.username|make_list|first|upper }}
+                                </div>
+                                <span style="font-weight: 500;">{{ u.username }}</span>
+                            </div>
+                        </td>
+                        <td>{{ u.email }}</td>
+                        <td>
+                            {% if u.is_staff %}
+                            <span class="badge badge-info">Admin</span>
+                            {% else %}
+                            <span class="badge badge-muted">User</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <button class="btn btn-secondary"
+                                style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Edit</button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="empty-state">No users found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

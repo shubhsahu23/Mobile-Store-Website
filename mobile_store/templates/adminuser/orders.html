@@ -1,0 +1,67 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Manage Orders - MobileStore{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">All Orders</h1>
+            <p class="page-subtitle">Monitor order activity and update delivery status.</p>
+        </div>
+        <a href="/adminuser/dashboard/" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <div class="card p-0" style="overflow: hidden;">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>User</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for o in orders %}
+                    <tr>
+                        <td>#{{ o.id }}</td>
+                        <td>
+                            <span style="font-weight: 500;">{{ o.user.username }}</span>
+                        </td>
+                        <td>{{ o.product.name }}</td>
+                        <td>{{ o.quantity }}</td>
+                        <td style="font-weight: 600;">₹{{ o.total_price }}</td>
+                        <td>
+                            {% if o.status == 'Pending' %}
+                            <span class="badge badge-warning">{{ o.status }}</span>
+                            {% elif o.status == 'Delivered' %}
+                            <span class="badge badge-success">{{ o.status }}</span>
+                            {% else %}
+                            <span class="badge badge-muted">{{ o.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <select class="form-control" style="padding: 0.25rem; font-size: 0.875rem; width: auto;">
+                                <option>Update Status</option>
+                                <option>Pending</option>
+                                <option>Shipped</option>
+                                <option>Delivered</option>
+                            </select>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="empty-state">No orders found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
