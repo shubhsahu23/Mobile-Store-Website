@@ -31,6 +31,13 @@
                 <div>
                     <span class="product-brand">{{ item.product.brand }}</span>
                     <h3 class="product-title" style="margin-bottom: 0.75rem;">{{ item.product.name }}</h3>
+                    
+                    {% if item.product.description %}
+                    <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 0.75rem; line-height: 1.5;">
+                        {{ item.product.description|truncatewords:20 }}
+                    </p>
+                    {% endif %}
+                    
                     <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
                         Price: <span style="color: var(--primary-color); font-weight: 600;">₹{{ item.product.price }}</span>
                     </p>
